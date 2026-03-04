@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>University of Lancashire : Networking Path</title>
+    <style>
+        /* Base Styles copied from Networking.html */
+        :root{
+            --bg:#1a1a2e;
+            --panel:#0f0f1b;
+            --accent:#00ff00; 
+            --muted:#ccc;
+            --gold:#ffaa00; 
+        }
+        html,body{
+            height:100%; 
+            margin:0; 
+            background:var(--bg); 
+            color:#e0e0e0; 
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: var(--gold);
+            font-size: 3.2em;
+            text-shadow: 0 0 5px rgba(255, 170, 0, 0.3);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: var(--accent);
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--accent); 
+            padding-left: 10px;
+        }
+
+        .highlight-bold {
+            color: var(--gold); 
+            font-weight: bold;
+        }
+        
+        /* New Styles for Network Path Demonstration */
+        .network-path-demonstrator {
+            background: var(--panel);
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.15);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Status Display - ADJUSTED FOR FIXED HEIGHT */
+        #status-display {
+            background: #000;
+            color: var(--accent);
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 1.1em; /* Slight adjustment to font size */
+            line-height: 1.4; /* Better line spacing for multiple lines */
+            margin-bottom: 30px;
+            min-height: 70px; /* Set fixed min-height to prevent resizing */
+            text-align: left;
+            border-left: 5px solid var(--gold);
+        }
+        
+        /* Components Layout (Flexbox) */
+        .network-components {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .component-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding: 10px;
+            width: 150px; /* Uniform width for labels */
+        }
+
+        .component-icon {
+            font-size: 3em; /* Icon size */
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s, text-shadow 0.2s;
+            line-height: 1;
+        }
+
+        .component-icon:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 10px var(--gold);
+        }
+
+        .component-label {
+            color: var(--muted);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* The lines connecting components */
+        .connection-line {
+            height: 2px;
+            background: var(--muted);
+            flex-grow: 1;
+            margin: 0 -10px; /* Overlap with padding */
+            transition: background 0.3s;
+        }
+        
+        /* Interactive Highlight Class */
+        .highlight-glow {
+            color: var(--gold) !important;
+            text-shadow: 0 0 20px var(--gold);
+            transform: scale(1.1);
+        }
+        
+        .line-active {
+            background: var(--accent) !important;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Send Packet Button */
+        #send-packet-button {
+            text-decoration: none;
+            background: var(--accent);
+            color: var(--bg); 
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.2em;
+            display: inline-block;
+            transition: background 0.2s, transform 0.2s;
+            text-shadow: none;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+            margin-top: 30px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #send-packet-button:hover {
+            background: #4bff4b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 255, 0, 0.6);
+        }
+        
+        #send-packet-button:disabled {
+            background: #444;
+            color: #888;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>> NETWORKING FUNDAMENTALS: THE PACKET'S JOURNEY</h1>
+
+        <p>
+            When you send data—like clicking a link or sending an email—your computer doesn't send the whole message at once. Instead, it breaks the data into small chunks called **packets**. These packets then embark on a carefully managed journey to their destination.
+        </p>
+        <p>
+            On a local network, the primary path for a packet trying to reach the outside world (the Internet) involves three essential steps: the **Gateway**, the **Router**, and the **Firewall**.
+        </p>
+
+        <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 40px 0;">
+
+        <h2>Simulate the Packet's Path</h2>
+
+        <div class="network-path-demonstrator">
+            <div id="status-display">
+                Click **SEND PACKET** to watch the data leave your local network.
+            </div>
+            
+            <div class="network-components">
+                
+                <div id="pc-node" class="component-node">
+                    <span id="pc-icon" class="component-icon" style="color: var(--accent);">🖥️</span>
+                    <span class="component-label">Your PC (Source)</span>
+                </div>
+                
+                <div id="line-1" class="connection-line"></div>
+                
+                <div id="gateway-node" class="component-node">
+                    <span id="gateway-icon" class="component-icon" style="color: var(--muted);">🚪</span>
+                    <span class="component-label">Gateway (192.168.1.1)</span>
+                </div>
+                
+                <div id="line-2" class="connection-line"></div>
+
+                <div id="router-node" class="component-node">
+                    <span id="router-icon" class="component-icon" style="color: var(--muted);">🖧</span>
+                    <span class="component-label">Router (Traffic Director)</span>
+                </div>
+                
+                <div id="line-3" class="connection-line"></div>
+
+                <div id="firewall-node" class="component-node">
+                    <span id="firewall-icon" class="component-icon" style="color: var(--muted);">🛡️</span>
+                    <span class="component-label">Firewall (Security Check)</span>
+                </div>
+                
+                <div id="line-4" class="connection-line"></div>
+
+                <div id="internet-node" class="component-node">
+                    <span id="internet-icon" class="component-icon" style="color: var(--muted);">🌍</span>
+                    <span class="component-label">The Internet (Destination)</span>
+                </div>
+            </div>
+            
+            <button id="send-packet-button" onclick="sendPacket()">SEND PACKET</button>
+        </div>
+
+        <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 40px 0;">
+
+        <h2>Key Definitions</h2>
+        <div style="background: var(--panel); padding: 20px; border-radius: 4px; margin-bottom: 20px; border-left: 5px solid var(--gold);">
+            <ul>
+                <li><strong>Gateway:</strong> The **exit door** for all local network traffic. The Gateway address is the IP of the local side of the Router, telling your PC where to send packets destined for the Internet.</li>
+                <li><strong>Router:</strong> A specialized device that **connects different networks**. It reads the destination IP in the packet and uses a **routing table** to decide the best path to forward the packet.</li>
+                <li><strong>Firewall:</strong> A system that **enforces a set of security rules**. It inspects packets to ensure they are safe and authorized before allowing them to enter or leave the network.</li>
+                <li><strong>Internet:</strong> A massive **network of networks** outside your local boundary.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Store all elements
+        const button = document.getElementById('send-packet-button');
+        const statusDisplay = document.getElementById('status-display');
+        
+        // Define all steps with detailed status messages
+        const steps = [
+            // Stage 1: PC
+            { 
+                target: document.getElementById('pc-icon'), 
+                type: 'icon', 
+                status: 'Packet created. Your PC breaks the data into small chunks, attaching a **header** that lists the destination IP address (where it\'s going) and the source IP (where it came from).' 
+            },
+            // Line 1
+            { 
+                target: document.getElementById('line-1'), 
+                type: 'line', 
+                status: 'Packet is now traveling across your local network segment (e.g., your Ethernet cable or Wi-Fi).' 
+            },
+            // Stage 2: Gateway
+            { 
+                target: document.getElementById('gateway-icon'), 
+                type: 'icon', 
+                status: 'Packet arrived at the **Gateway**. Since the destination is external, your PC\'s software told the packet to head straight for the Gateway\'s address (usually the local side of your Router).' 
+            },
+            // Line 2
+            { 
+                target: document.getElementById('line-2'), 
+                type: 'line', 
+                status: 'The packet has crossed the internal Gateway interface. It is now inside the Router device.' 
+            },
+            // Stage 3: Router
+            { 
+                target: document.getElementById('router-icon'), 
+                type: 'icon', 
+                status: 'Packet arrived at the **Router**. The Router inspects the packet\'s destination IP, looks up its **routing table**, and decides which of its external interfaces (like the one facing the internet service provider) offers the best path forward.' 
+            },
+            // Line 3
+            { 
+                target: document.getElementById('line-3'), 
+                type: 'line', 
+                status: 'The Router is directing the packet out toward the outside world.' 
+            },
+            // Stage 4: Firewall
+            { 
+                target: document.getElementById('firewall-icon'), 
+                type: 'icon', 
+                status: 'Packet is inspected by the **Firewall**. The Firewall checks the packet\'s header against a set of rules—ensuring it\'s not malicious and that traffic on that specific port (e.g., HTTP 80) is permitted to leave your network.' 
+            },
+            // Line 4
+            { 
+                target: document.getElementById('line-4'), 
+                type: 'line', 
+                status: 'Passed the security check. The packet is now leaving your immediate network boundary.' 
+            },
+            // Stage 5: Internet
+            { 
+                target: document.getElementById('internet-icon'), 
+                type: 'icon', 
+                status: 'Packet has entered the **Internet**! From here, it begins jumping from router to router (a process called **"hopping"**) across the globe until it reaches its final destination.' 
+            }
+        ];
+
+        // Resets the visual state
+        function resetVisuals() {
+            steps.forEach(step => {
+                if (step.type === 'icon') {
+                    step.target.classList.remove('highlight-glow');
+                    step.target.style.color = step.target.id === 'pc-icon' ? 'var(--accent)' : 'var(--muted)';
+                } else if (step.type === 'line') {
+                    step.target.classList.remove('line-active');
+                }
+            });
+            statusDisplay.textContent = 'Click SEND PACKET to watch the data leave your local network.';
+        }
+
+        // Main simulation function
+        function sendPacket() {
+            if (button.disabled) return;
+            
+            button.disabled = true;
+            resetVisuals(); // Ensure a clean slate
+            
+            let delay = 0;
+            // Standard step duration is 3 seconds (3000ms)
+            const stepDuration = 3000; 
+            // Line travel is quicker for better flow (e.g., 500ms)
+            const lineDuration = 500; 
+
+            for (let i = 0; i < steps.length; i++) {
+                const step = steps[i];
+                const currentDuration = step.type === 'icon' ? stepDuration : lineDuration;
+
+                setTimeout(() => {
+                    
+                    // --- 1. VISUAL UPDATE ---
+                    if (step.type === 'icon') {
+                        // Highlight the icon
+                        step.target.classList.add('highlight-glow');
+                        // Un-highlight previous icon after a short delay for the "flash" effect (only if previous was an icon)
+                        for (let j = i - 1; j >= 0; j--) {
+                            if (steps[j].type === 'icon') {
+                                setTimeout(() => {
+                                    steps[j].target.classList.remove('highlight-glow');
+                                }, lineDuration);
+                                break;
+                            }
+                        }
+                    } else if (step.type === 'line') {
+                        // Highlight the line
+                        step.target.classList.add('line-active');
+                    }
+                    
+                    // --- 2. STATUS UPDATE ---
+                    statusDisplay.innerHTML = step.status;
+
+                    // --- 3. FINAL STEP LOGIC ---
+                    if (i === steps.length - 1) {
+                        setTimeout(() => {
+                            button.disabled = false;
+                            statusDisplay.innerHTML += ' <span style="color: var(--gold)">The connection is established, and the website is loading...</span>';
+                            // Reset visuals after a brief pause
+                            setTimeout(resetVisuals, 2000); 
+                        }, currentDuration);
+                    }
+                }, delay);
+                
+                delay += currentDuration;
+            }
+        }
+        
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', resetVisuals);
+    </script>
+</body>
+</html>
